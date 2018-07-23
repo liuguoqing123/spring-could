@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.forezp.mapper.UsersMapper">
+
+	<resultMap type="com.forezp.bean.Users" id="resultRM">
+		<id property="id" column="id" />
+		<result property="userName" column="user_name" />
+		<result property="userTel" column="user_tel" />
+		<result property="userSex" column="user_sex" />
+		<result property="userAddr" column="user_addr" />
+		<result property="userRemark" column="user_remark" />
+	</resultMap>
+
+	<select id="getTotal" parameterType="Map" resultType="Long">
+		select count(*) from users
+		<where>
+			<if test="userName!=null and userName!='' ">
+				and user_name like #{userName}
+			</if>
+			<if test="userTel != null and userTel != '' ">
+				and user_tel like #{userTel}
+			</if>
+		</where>
+	</select>
+
+	<select id="find" resultMap="resultRM">
+		select * from users
+		<where>
+			<if test="userName!=null and userName!='' ">
+				and user_name like #{userName}
+			</if>
+			<if test="userTel != null and userTel != '' ">
+				and user_tel like #{userTel}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit ${start},${size}
+		</if>
+	</select>
+
+	<select id="selectById" resultMap="resultRM">
+		select * from users where
+		id =
+		#{id}
+	</select>
+
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+		insert
+		into users(user_name,user_tel,user_sex,user_addr,user_remark) values(#{userName},#{userTel},#{userSex},#{userAddr},#{userRemark})
+	</insert>
+
+	<delete id="delete">
+		delete from users where id = #{id}
+	</delete>
+
+
+	<update id="update">
+		update users
+		<set>
+			<if test="userName != null and userName != '' ">
+				user_name = #{userName},
+			</if>
+			<if test="userSex != null and userSex != '' ">
+				user_sex = #{userSex},
+			</if>
+			<if test="userTel != null and userTel != '' ">
+				user_tel = #{userTel},
+			</if>
+			<if test="userAddr != null and userAddr != '' ">
+				user_addr = #{userAddr},
+			</if>
+			<if test="userRemark != null and userRemark != '' ">
+				user_remark = #{userRemark},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="selectAll" resultMap="resultRM">
+		select * from users
+	</select>
+
+
+	<select id="select1" resultMap="resultRM">
+		select * from users
+		<where>
+			<if test="userName != null and userName != '' ">
+				and user_name = #{userName}
+			</if>
+			<if test="userSex != null and userSex != '' ">
+				and user_sex = #{userSex}
+			</if>
+		</where>
+	</select>
+
+	
+</mapper>
